@@ -76,6 +76,10 @@ public class ConsumerDemo {
                 }
             }
         }, "BB").start();
+        
+        new Thread(()->{
+
+        },"name").start();
     }
     
 }
