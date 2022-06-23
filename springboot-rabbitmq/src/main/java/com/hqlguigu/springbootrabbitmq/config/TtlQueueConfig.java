@@ -13,7 +13,7 @@ public class TtlQueueConfig {
     public static final String QUEUE_A= "QA";
     public static final String QUEUE_B= "QB";
     public static final String Y_DEAD_LETTER_EXCHANGE= "Y";
-
+    public static final String DEAD_LETTER_QUEUE = "QD";
 
     @Bean("xExchange")
     public DirectExchange xExchange()  {
@@ -46,6 +46,25 @@ public class TtlQueueConfig {
     }
     public Binding queueaBindingX(@Qualifier("queueB")Queue queueB, @Qualifier("xExchange")DirectExchange directExchange){
         return BindingBuilder.bind(queueB).to(directExchange).with("Xb");
+    }
+
+    @Bean
+    public Binding queuebBindingX(@Qualifier("queueB") Queue queue1B,
+                                  @Qualifier("xExchange") DirectExchange xExchange){
+        return BindingBuilder.bind(queue1B).to(xExchange).with("XB");
+    }
+    
+    //声明死信队列 QD
+    @Bean("queueD")
+    public Queue queueD() {
+        return new Queue(DEAD_LETTER_QUEUE);
+    }
+
+    //声明死信队列 QD 绑定关系
+    @Bean
+    public Binding deadLetterBindingQAD(@Qualifier("queueD") Queue queueD,
+                                        @Qualifier("yExchange") DirectExchange yExchange){
+        return BindingBuilder.bind(queueD).to(yExchange).with("YD");
     }
 
 }
